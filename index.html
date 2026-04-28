@@ -687,18 +687,6 @@ const APP_STATUSES = {
   'оффер':      { bg:'#D1FAE5', color:'#059669' }
 };
 
-const INTERVIEW_STAGES = {
-  'скрининг':   'badge-blue',
-  'техническое':'badge-purple',
-  'финал':      'badge-pink'
-};
-
-const INTERVIEW_RESULTS = {
-  'ожидаем':        'badge-gray',
-  'следующий этап': 'badge-blue',
-  'оффер':          'badge-green',
-  'отказ':          'badge-red'
-};
 
 function appStatusSelect(id, current) {
   const opts = Object.entries(APP_STATUSES).map(([name, c]) =>
@@ -709,13 +697,6 @@ function appStatusSelect(id, current) {
     onchange="changeAppStatus('${id}',this)">${opts}</select>`;
 }
 
-function interviewResultSelect(id, current) {
-  const opts = Object.keys(INTERVIEW_RESULTS).map(r =>
-    `<option value="${esc(r)}" ${r===current?'selected':''}>${r}</option>`
-  ).join('');
-  return `<select class="status-select badge ${INTERVIEW_RESULTS[current]||'badge-gray'}"
-    onchange="changeInterviewResult('${id}',this)">${opts}</select>`;
-}
 
 function badge(text, cls) {
   return `<span class="badge ${cls}">${esc(text)}</span>`;
@@ -727,7 +708,6 @@ function renderAll() {
   renderResume();
   renderLinkedin();
   renderApplications();
-  renderInterviews();
   renderCounters();
 }
 
@@ -842,43 +822,6 @@ function changeAppStatus(id, selectEl) {
   renderCounters();
 }
 
-// ── INTERVIEWS ────────────────────────────────────────
-function renderInterviews() {
-  const el = document.getElementById('table-interviews');
-  if (!db.interviews.length) {
-    el.innerHTML = `<div style="padding:0 18px">${emptyHtml()}</div>`;
-    return;
-  }
-  const rows = db.interviews.map(r => `
-    <tr>
-      <td class="td-co">${esc(r.company)}</td>
-      <td>${esc(r.role)}</td>
-      <td style="white-space:nowrap;color:var(--muted);font-size:.78rem">${esc(r.date)}</td>
-      <td>${badge(r.stage, INTERVIEW_STAGES[r.stage] || 'badge-gray')}</td>
-      <td>${interviewResultSelect(r.id, r.result)}</td>
-      <td class="td-note" style="font-size:.78rem">${esc(r.insights)}</td>
-      <td class="td-actions">
-        <button class="btn-icon" title="Редактировать" onclick="openModal('interviews','${r.id}')">✎</button>
-        <button class="btn-icon danger" title="Удалить" onclick="askDelete('interviews','${r.id}')">✕</button>
-      </td>
-    </tr>`).join('');
-
-  el.innerHTML = `<table>
-    <thead><tr>
-      <th>Компания</th><th>Роль</th><th>Дата</th><th>Этап</th>
-      <th>Итог</th><th>Инсайты</th><th></th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-function changeInterviewResult(id, selectEl) {
-  const r = db.interviews.find(i => i.id === id);
-  if (!r) return;
-  r.result = selectEl.value;
-  selectEl.className = `status-select badge ${INTERVIEW_RESULTS[r.result] || 'badge-gray'}`;
-  saveDB();
-}
 
 // ── MODAL CONFIG ──────────────────────────────────────
 const MODAL_CONFIGS = {
@@ -924,18 +867,6 @@ const MODAL_CONFIGS = {
     ],
     defaults: () => ({ company:'', position:'', date:today(), channel:'', status:'отправлен', link:'', note:'' })
   },
-  interviews: {
-    title: edit => edit ? 'Редактировать собеседование' : 'Добавить собеседование',
-    fields: [
-      { key:'company',  label:'Компания', type:'text', req:true, ph:'Яндекс' },
-      { key:'role',     label:'Роль',     type:'text', req:true, ph:'HR Business Partner' },
-      { key:'date',     label:'Дата',     type:'date', req:true },
-      { key:'stage',    label:'Этап',     type:'select', options: Object.keys(INTERVIEW_STAGES), req:true },
-      { key:'result',   label:'Итог',     type:'select', options: Object.keys(INTERVIEW_RESULTS), req:true },
-      { key:'insights', label:'Инсайты', type:'textarea', ph:'Что сработало, что нет, что поправить...' }
-    ],
-    defaults: () => ({ company:'', role:'', date:today(), stage:'скрининг', result:'ожидаем', insights:'' })
-  }
 };
 
 // ── MODAL OPEN / CLOSE ────────────────────────────────
