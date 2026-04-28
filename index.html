@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Трекер поиска работы</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FAF8F5;
+  --surface: #FFFFFF;
+  --surface-2: #F5F0EB;
+  --border: #EAE5DF;
+  --purple: #7C3AED;
+  --purple-dark: #6D28D9;
+  --purple-light: #EDE9FE;
+  --pink: #EC4899;
+  --pink-light: #FCE7F3;
+  --text: #1C1917;
+  --muted: #78716C;
+  --success: #059669;
+  --success-bg: #D1FAE5;
+  --warning: #B45309;
+  --warning-bg: #FEF3C7;
+  --danger: #DC2626;
+  --danger-bg: #FEE2E2;
+  --info: #1D4ED8;
+  --info-bg: #DBEAFE;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 4px rgba(0,0,0,.07), 0 0 0 1px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.header-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.site-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── COUNTERS ── */
+.counters { display: flex; gap: 12px; flex-wrap: wrap; }
+.counter-card {
+  flex: 1;
+  min-width: 110px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+}
+.counter-num {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.counter-label {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-top: 2px;
+}
+
+/* ── LAYOUT ── */
+.main { max-width: 1240px; margin: 0 auto; padding: 28px 24px 48px; }
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.grid-full { display: flex; flex-direction: column; gap: 20px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.card-title {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--purple-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.card-body { padding: 14px 18px; }
+.card-body-flush { padding: 0; }
+.section-tools { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-size: .84rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: opacity .15s, transform .15s, box-shadow .15s;
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--purple), var(--pink));
+  color: #fff;
+}
+.btn-primary:hover { opacity: .88; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-ghost {
+  background: transparent;
+  color: var(--purple);
+  border: 1.5px solid var(--purple-light);
+}
+.btn-ghost:hover { background: var(--purple-light); }
+.btn-cancel {
+  background: var(--surface-2);
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+}
+.btn-cancel:hover { background: var(--border); color: var(--text); }
+.btn-danger-soft {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1.5px solid #FECACA;
+}
+.btn-danger-soft:hover { background: #FECACA; }
+.btn-sm { padding: 5px 12px; font-size: .78rem; border-radius: 6px; }
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  background: transparent;
+  font-size: 14px;
+  transition: background .12s, color .12s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.btn-icon:hover { background: var(--surface-2); color: var(--text); }
+.btn-icon.danger:hover { background: var(--danger-bg); color: var(--danger); }
+
+/* ── RECORDS LIST (Network, Resume, LinkedIn) ── */
+.records-list { display: flex; flex-direction: column; gap: 8px; }
+.record-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: box-shadow .12s;
+}
+.record-item:hover { box-shadow: var(--shadow); }
+.record-content { flex: 1; min-width: 0; }
+.record-main { font-weight: 600; font-size: .88rem; word-break: break-word; }
+.record-sub { font-size: .76rem; color: var(--muted); margin-top: 2px; }
+.record-note { font-size: .78rem; color: var(--muted); margin-top: 5px; font-style: italic; line-height: 1.4; }
+.record-link { font-size: .76rem; margin-top: 5px; }
+.record-link a { color: var(--purple); text-decoration: none; font-weight: 500; }
+.record-link a:hover { text-decoration: underline; }
+.record-actions { display: flex; gap: 2px; flex-shrink: 0; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+  font-size: .85rem;
+}
+.empty-state-inner { display: inline-block; }
+.empty-icon { font-size: 2rem; margin-bottom: 8px; opacity: .4; }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .84rem; min-width: 640px; }
+thead th {
+  text-align: left;
+  padding: 10px 13px;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 10px 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #FDFBF9; }
+.td-co { font-weight: 600; }
+.td-actions { white-space: nowrap; text-align: right; }
+.td-note { color: var(--muted); max-width: 220px; }
+.td-link a { color: var(--purple); font-size: .78rem; text-decoration: none; font-weight: 500; }
+.td-link a:hover { text-decoration: underline; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: .7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: .01em;
+}
+.badge-gray   { background: #F3F4F6; color: #4B5563; }
+.badge-blue   { background: var(--info-bg); color: var(--info); }
+.badge-red    { background: var(--danger-bg); color: var(--danger); }
+.badge-amber  { background: var(--warning-bg); color: var(--warning); }
+.badge-green  { background: var(--success-bg); color: var(--success); }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+.badge-pink   { background: var(--pink-light); color: #BE185D; }
+
+/* ── INLINE STATUS SELECT ── */
+.status-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  transition: opacity .12s;
+}
+.status-select:hover { opacity: .8; }
+.status-select:focus { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 23, .45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: 16px;
+  backdrop-filter: blur(3px);
+}
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 64px rgba(0,0,0,.18);
+  width: 100%;
+  max-width: 500px;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: modalIn .18s ease;
+}
+@keyframes modalIn {
+  from { transform: translateY(12px) scale(.98); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.modal-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+.modal-title { font-size: 1.05rem; font-weight: 700; color: var(--purple); }
+.modal-body { padding: 18px 22px; }
+.modal-footer {
+  padding: 14px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  position: sticky;
+  bottom: 0;
+  background: var(--surface);
+}
+
+/* ── FORM ── */
+.form-group { margin-bottom: 14px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-label {
+  display: block;
+  font-size: .82rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text);
+}
+.form-label .req { color: var(--pink); margin-left: 2px; }
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: .9rem;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color .15s, box-shadow .15s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, .12);
+}
+.form-control.error { border-color: var(--danger); }
+select.form-control {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  padding-right: 34px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+textarea.form-control { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+/* ── CONFIRM ── */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 23, .5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+  padding: 16px;
+  backdrop-filter: blur(3px);
+}
+.confirm-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  animation: modalIn .15s ease;
+}
+.confirm-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+.confirm-text { color: var(--muted); font-size: .88rem; margin-bottom: 20px; line-height: 1.5; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1C1917;
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: var(--radius-sm);
+  font-size: .84rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  z-index: 700;
+  animation: toastIn .25s ease;
+  pointer-events: none;
+}
+@keyframes toastIn {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* ── UTILS ── */
+.hidden { display: none !important; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .header-inner { padding: 0 16px; }
+  .main { padding: 16px 16px 40px; }
+  .counter-card { min-width: 80px; }
+  .counter-num { font-size: 1.5rem; }
+  .site-title { font-size: 1.2rem; }
+  .toast { bottom: 16px; right: 16px; left: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     HEADER
+════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <h1 class="site-title">Трекер поиска работы</h1>
+      <div class="header-actions">
+        <button class="btn btn-ghost btn-sm" onclick="downloadJSON()">↓ Скачать JSON</button>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer">
+          ↑ Загрузить JSON
+          <input type="file" accept=".json" class="hidden" onchange="uploadJSON(event)">
+        </label>
+      </div>
+    </div>
+    <div class="counters">
+      <div class="counter-card">
+        <div class="counter-num" id="cnt-apps">0</div>
+        <div class="counter-label">Откликов</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-num" id="cnt-interviews">0</div>
+        <div class="counter-label">Собеседований</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-num" id="cnt-offers">0</div>
+        <div class="counter-label">Офферов</div>
+      </div>
+      <div class="counter-card">
+        <div class="counter-num" id="cnt-contacts">0</div>
+        <div class="counter-label">Контактов</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════
+     MAIN
+════════════════════════════════════ -->
+<main class="main">
+
+  <!-- Row 1: three small sections -->
+  <div class="grid-3">
+
+    <!-- NETWORK -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon">◈</div>
+          Нетворк
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('network')">+ Добавить</button>
+      </div>
+      <div class="card-body">
+        <div class="records-list" id="list-network"></div>
+      </div>
+    </div>
+
+    <!-- RESUME -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon">◉</div>
+          Резюме
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('resume')">+ Добавить</button>
+      </div>
+      <div class="card-body">
+        <div class="records-list" id="list-resume"></div>
+      </div>
+    </div>
+
+    <!-- LINKEDIN -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon">in</div>
+          LinkedIn
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('linkedin')">+ Добавить</button>
+      </div>
+      <div class="card-body">
+        <div class="records-list" id="list-linkedin"></div>
+      </div>
+    </div>
+
+  </div><!-- /grid-3 -->
+
+  <!-- Row 2: full-width sections -->
+  <div class="grid-full">
+
+    <!-- APPLICATIONS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon">◎</div>
+          Отклики
+        </div>
+        <div class="section-tools">
+          <button class="btn btn-ghost btn-sm" onclick="exportCSV('applications')">↓ CSV</button>
+          <button class="btn btn-primary btn-sm" onclick="openModal('applications')">+ Добавить</button>
+        </div>
+      </div>
+      <div class="card-body-flush">
+        <div class="table-wrap" id="table-applications"></div>
+      </div>
+    </div>
+
+  </div><!-- /grid-full -->
+
+</main>
+
+<!-- ════════════════════════════════════
+     MODAL
+════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="onOverlayClick(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Добавить запись</div>
+      <button class="btn-icon" onclick="closeModal()" title="Закрыть">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn btn-primary" onclick="saveModal()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     CONFIRM DELETE
+════════════════════════════════════ -->
+<div class="confirm-overlay hidden" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title">Удалить запись?</div>
+    <div class="confirm-text">Это действие нельзя отменить.</div>
+    <div class="confirm-actions">
+      <button class="btn btn-cancel" onclick="closeConfirm()">Отмена</button>
+      <button class="btn btn-danger-soft" onclick="confirmDelete()">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ── DATA ──────────────────────────────────────────────
+const STORAGE_KEY = 'jst_v1';
+
+let db = { network: [], resume: [], linkedin: [], applications: [], interviews: [] };
+let _storageOk = false;
+
+function checkStorage() {
+  try {
+    localStorage.setItem('__jst_ping', '1');
+    localStorage.removeItem('__jst_ping');
+    _storageOk = true;
+  } catch(e) {
+    _storageOk = false;
+    const banner = document.createElement('div');
+    banner.style.cssText = [
+      'position:fixed','top:0','left:0','right:0','z-index:9999',
+      'background:#DC2626','color:#fff','text-align:center',
+      'padding:10px 16px','font-size:.84rem','font-weight:600','line-height:1.4'
+    ].join(';');
+    banner.textContent = 'localStorage недоступен — данные не будут сохраняться между перезагрузками. Откройте файл в обычном (не приватном) окне браузера.';
+    document.body.prepend(banner);
+  }
+}
+
+function loadDB() {
+  if (!_storageOk) return;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    ['network','resume','linkedin','applications','interviews'].forEach(k => {
+      if (Array.isArray(parsed[k])) db[k] = parsed[k];
+    });
+  } catch(e) {
+    console.warn('loadDB error:', e);
+  }
+}
+
+function saveDB() {
+  if (!_storageOk) return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  } catch(e) {
+    console.error('saveDB error:', e);
+    toast('Ошибка сохранения — проверьте настройки браузера');
+  }
+}
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+}
+
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+
+// ── ESCAPE ────────────────────────────────────────────
+function esc(v) {
+  return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function safeHref(url) {
+  if (!url) return '';
+  const u = String(url).trim();
+  return /^https?:\/\//i.test(u) ? u : 'https://' + u;
+}
+
+// ── STATUS CONFIG ─────────────────────────────────────
+const APP_STATUSES = {
+  'отправлен':  { bg:'#F3F4F6', color:'#4B5563' },
+  'переговоры': { bg:'#DBEAFE', color:'#1D4ED8' },
+  'отказ':      { bg:'#FEE2E2', color:'#DC2626' },
+  'интервью':   { bg:'#FEF3C7', color:'#B45309' },
+  'оффер':      { bg:'#D1FAE5', color:'#059669' }
+};
+
+const INTERVIEW_STAGES = {
+  'скрининг':   'badge-blue',
+  'техническое':'badge-purple',
+  'финал':      'badge-pink'
+};
+
+const INTERVIEW_RESULTS = {
+  'ожидаем':        'badge-gray',
+  'следующий этап': 'badge-blue',
+  'оффер':          'badge-green',
+  'отказ':          'badge-red'
+};
+
+function appStatusSelect(id, current) {
+  const opts = Object.entries(APP_STATUSES).map(([name, c]) =>
+    `<option value="${esc(name)}" ${name===current?'selected':''} style="background:${c.bg};color:${c.color}">${name}</option>`
+  ).join('');
+  const c = APP_STATUSES[current] || APP_STATUSES['отправлен'];
+  return `<select class="status-select" style="background:${c.bg};color:${c.color}"
+    onchange="changeAppStatus('${id}',this)">${opts}</select>`;
+}
+
+function interviewResultSelect(id, current) {
+  const opts = Object.keys(INTERVIEW_RESULTS).map(r =>
+    `<option value="${esc(r)}" ${r===current?'selected':''}>${r}</option>`
+  ).join('');
+  return `<select class="status-select badge ${INTERVIEW_RESULTS[current]||'badge-gray'}"
+    onchange="changeInterviewResult('${id}',this)">${opts}</select>`;
+}
+
+function badge(text, cls) {
+  return `<span class="badge ${cls}">${esc(text)}</span>`;
+}
+
+// ── RENDER ────────────────────────────────────────────
+function renderAll() {
+  renderNetwork();
+  renderResume();
+  renderLinkedin();
+  renderApplications();
+  renderInterviews();
+  renderCounters();
+}
+
+function renderCounters() {
+  const interviews = db.applications.filter(a => a.status === 'интервью').length;
+  const offers = db.applications.filter(a => a.status === 'оффер').length;
+  const contacts = db.network.length + db.linkedin.length;
+  document.getElementById('cnt-apps').textContent       = db.applications.length;
+  document.getElementById('cnt-interviews').textContent = interviews;
+  document.getElementById('cnt-offers').textContent     = offers;
+  document.getElementById('cnt-contacts').textContent   = contacts;
+}
+
+function emptyHtml() {
+  return `<div class="empty-state"><div class="empty-icon">○</div><br>Пока пусто. Добавьте первую запись.</div>`;
+}
+
+// ── NETWORK ───────────────────────────────────────────
+function renderNetwork() {
+  const el = document.getElementById('list-network');
+  if (!db.network.length) { el.innerHTML = emptyHtml(); return; }
+  el.innerHTML = db.network.map(r => `
+    <div class="record-item">
+      <div class="record-content">
+        <div class="record-main">${esc(r.action)}</div>
+        <div class="record-sub">${esc(r.date)}</div>
+        ${r.note ? `<div class="record-note">${esc(r.note)}</div>` : ''}
+      </div>
+      <div class="record-actions">
+        <button class="btn-icon" title="Редактировать" onclick="openModal('network','${r.id}')">✎</button>
+        <button class="btn-icon danger" title="Удалить" onclick="askDelete('network','${r.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── RESUME ────────────────────────────────────────────
+function renderResume() {
+  const el = document.getElementById('list-resume');
+  if (!db.resume.length) { el.innerHTML = emptyHtml(); return; }
+  el.innerHTML = db.resume.map(r => `
+    <div class="record-item">
+      <div class="record-content">
+        <div class="record-main">${esc(r.name)}</div>
+        <div class="record-sub">${esc(r.role) ? esc(r.role) + ' · ' : ''}${esc(r.date)}</div>
+        ${r.note ? `<div class="record-note">${esc(r.note)}</div>` : ''}
+        ${r.link ? `<div class="record-link"><a href="${esc(safeHref(r.link))}" target="_blank" rel="noopener">Открыть ↗</a></div>` : ''}
+      </div>
+      <div class="record-actions">
+        <button class="btn-icon" title="Редактировать" onclick="openModal('resume','${r.id}')">✎</button>
+        <button class="btn-icon danger" title="Удалить" onclick="askDelete('resume','${r.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── LINKEDIN ──────────────────────────────────────────
+function renderLinkedin() {
+  const el = document.getElementById('list-linkedin');
+  if (!db.linkedin.length) { el.innerHTML = emptyHtml(); return; }
+  el.innerHTML = db.linkedin.map(r => `
+    <div class="record-item">
+      <div class="record-content">
+        <div class="record-main">${esc(r.action)}</div>
+        <div class="record-sub">${esc(r.date)}</div>
+        ${r.note ? `<div class="record-note">${esc(r.note)}</div>` : ''}
+      </div>
+      <div class="record-actions">
+        <button class="btn-icon" title="Редактировать" onclick="openModal('linkedin','${r.id}')">✎</button>
+        <button class="btn-icon danger" title="Удалить" onclick="askDelete('linkedin','${r.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── APPLICATIONS ──────────────────────────────────────
+function renderApplications() {
+  const el = document.getElementById('table-applications');
+  if (!db.applications.length) {
+    el.innerHTML = `<div style="padding:0 18px">${emptyHtml()}</div>`;
+    return;
+  }
+  const rows = db.applications.map(r => `
+    <tr>
+      <td class="td-co">${esc(r.company)}</td>
+      <td>${esc(r.position)}</td>
+      <td style="white-space:nowrap;color:var(--muted);font-size:.78rem">${esc(r.date)}</td>
+      <td style="font-size:.82rem">${esc(r.channel)}</td>
+      <td>${appStatusSelect(r.id, r.status)}</td>
+      <td class="td-link">${r.link ? `<a href="${esc(safeHref(r.link))}" target="_blank" rel="noopener">↗ открыть</a>` : ''}</td>
+      <td class="td-note" style="font-size:.78rem">${esc(r.note)}</td>
+      <td class="td-actions">
+        <button class="btn-icon" title="Редактировать" onclick="openModal('applications','${r.id}')">✎</button>
+        <button class="btn-icon danger" title="Удалить" onclick="askDelete('applications','${r.id}')">✕</button>
+      </td>
+    </tr>`).join('');
+
+  el.innerHTML = `<table>
+    <thead><tr>
+      <th>Компания</th><th>Позиция</th><th>Дата</th><th>Канал</th>
+      <th>Статус</th><th>Ссылка</th><th>Заметка</th><th></th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function changeAppStatus(id, selectEl) {
+  const r = db.applications.find(a => a.id === id);
+  if (!r) return;
+  r.status = selectEl.value;
+  const c = APP_STATUSES[r.status] || APP_STATUSES['отправлен'];
+  selectEl.style.background = c.bg;
+  selectEl.style.color = c.color;
+  saveDB();
+  renderCounters();
+}
+
+// ── INTERVIEWS ────────────────────────────────────────
+function renderInterviews() {
+  const el = document.getElementById('table-interviews');
+  if (!db.interviews.length) {
+    el.innerHTML = `<div style="padding:0 18px">${emptyHtml()}</div>`;
+    return;
+  }
+  const rows = db.interviews.map(r => `
+    <tr>
+      <td class="td-co">${esc(r.company)}</td>
+      <td>${esc(r.role)}</td>
+      <td style="white-space:nowrap;color:var(--muted);font-size:.78rem">${esc(r.date)}</td>
+      <td>${badge(r.stage, INTERVIEW_STAGES[r.stage] || 'badge-gray')}</td>
+      <td>${interviewResultSelect(r.id, r.result)}</td>
+      <td class="td-note" style="font-size:.78rem">${esc(r.insights)}</td>
+      <td class="td-actions">
+        <button class="btn-icon" title="Редактировать" onclick="openModal('interviews','${r.id}')">✎</button>
+        <button class="btn-icon danger" title="Удалить" onclick="askDelete('interviews','${r.id}')">✕</button>
+      </td>
+    </tr>`).join('');
+
+  el.innerHTML = `<table>
+    <thead><tr>
+      <th>Компания</th><th>Роль</th><th>Дата</th><th>Этап</th>
+      <th>Итог</th><th>Инсайты</th><th></th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function changeInterviewResult(id, selectEl) {
+  const r = db.interviews.find(i => i.id === id);
+  if (!r) return;
+  r.result = selectEl.value;
+  selectEl.className = `status-select badge ${INTERVIEW_RESULTS[r.result] || 'badge-gray'}`;
+  saveDB();
+}
+
+// ── MODAL CONFIG ──────────────────────────────────────
+const MODAL_CONFIGS = {
+  network: {
+    title: edit => edit ? 'Редактировать — Нетворк' : 'Добавить в Нетворк',
+    fields: [
+      { key:'action', label:'Действие', type:'text',     req:true,  ph:'Написал рекрутеру в LinkedIn' },
+      { key:'date',   label:'Дата',     type:'date',     req:true },
+      { key:'note',   label:'Заметка',  type:'textarea', ph:'Детали, результат...' }
+    ],
+    defaults: () => ({ action:'', date:today(), note:'' })
+  },
+  resume: {
+    title: edit => edit ? 'Редактировать версию резюме' : 'Добавить версию резюме',
+    fields: [
+      { key:'name', label:'Название версии',   type:'text', req:true,  ph:'Резюме v3 — Senior Recruiter' },
+      { key:'role', label:'Роль / Индустрия',  type:'text', ph:'Senior Recruiter, Tech' },
+      { key:'date', label:'Дата обновления',   type:'date', req:true },
+      { key:'link', label:'Ссылка',            type:'url',  ph:'https://...' },
+      { key:'note', label:'Ключевые изменения',type:'textarea', ph:'Что добавили, что убрали...' }
+    ],
+    defaults: () => ({ name:'', role:'', date:today(), link:'', note:'' })
+  },
+  linkedin: {
+    title: edit => edit ? 'Редактировать — LinkedIn' : 'Добавить в LinkedIn',
+    fields: [
+      { key:'action', label:'Действие', type:'text',     req:true, ph:'Опубликовал пост о поиске' },
+      { key:'date',   label:'Дата',     type:'date',     req:true },
+      { key:'note',   label:'Заметка',  type:'textarea', ph:'Реакция, результат...' }
+    ],
+    defaults: () => ({ action:'', date:today(), note:'' })
+  },
+  applications: {
+    title: edit => edit ? 'Редактировать отклик' : 'Добавить отклик',
+    fields: [
+      { key:'company',  label:'Компания',    type:'text', req:true, ph:'Яндекс' },
+      { key:'position', label:'Позиция',     type:'text', req:true, ph:'HR Business Partner' },
+      { key:'date',     label:'Дата отклика',type:'date', req:true },
+      { key:'channel',  label:'Канал',       type:'text', ph:'HeadHunter / LinkedIn / Реферал' },
+      { key:'status',   label:'Статус',      type:'select', options: Object.keys(APP_STATUSES), req:true },
+      { key:'link',     label:'Ссылка на вакансию', type:'url', ph:'https://...' },
+      { key:'note',     label:'Заметка',     type:'textarea', ph:'Впечатления, детали...' }
+    ],
+    defaults: () => ({ company:'', position:'', date:today(), channel:'', status:'отправлен', link:'', note:'' })
+  },
+  interviews: {
+    title: edit => edit ? 'Редактировать собеседование' : 'Добавить собеседование',
+    fields: [
+      { key:'company',  label:'Компания', type:'text', req:true, ph:'Яндекс' },
+      { key:'role',     label:'Роль',     type:'text', req:true, ph:'HR Business Partner' },
+      { key:'date',     label:'Дата',     type:'date', req:true },
+      { key:'stage',    label:'Этап',     type:'select', options: Object.keys(INTERVIEW_STAGES), req:true },
+      { key:'result',   label:'Итог',     type:'select', options: Object.keys(INTERVIEW_RESULTS), req:true },
+      { key:'insights', label:'Инсайты', type:'textarea', ph:'Что сработало, что нет, что поправить...' }
+    ],
+    defaults: () => ({ company:'', role:'', date:today(), stage:'скрининг', result:'ожидаем', insights:'' })
+  }
+};
+
+// ── MODAL OPEN / CLOSE ────────────────────────────────
+let _modalSection = null;
+let _modalId = null;
+
+function openModal(section, id) {
+  _modalSection = section;
+  _modalId = id || null;
+  const cfg = MODAL_CONFIGS[section];
+  const record = id ? db[section].find(r => r.id === id) : null;
+  const defaults = cfg.defaults();
+
+  document.getElementById('modal-title').textContent = cfg.title(!!record);
+
+  const bodyHtml = cfg.fields.map(f => {
+    const raw = record ? (record[f.key] ?? '') : (defaults[f.key] ?? '');
+    const label = `<label class="form-label" for="mf-${f.key}">${esc(f.label)}${f.req ? '<span class="req">*</span>' : ''}</label>`;
+
+    if (f.type === 'select') {
+      const opts = f.options.map(o =>
+        `<option value="${esc(o)}" ${o===raw?'selected':''}>${esc(o)}</option>`
+      ).join('');
+      return `<div class="form-group">${label}<select id="mf-${f.key}" class="form-control">${opts}</select></div>`;
+    }
+    if (f.type === 'textarea') {
+      return `<div class="form-group">${label}<textarea id="mf-${f.key}" class="form-control" placeholder="${esc(f.ph||'')}">${esc(raw)}</textarea></div>`;
+    }
+    return `<div class="form-group">${label}<input type="${f.type}" id="mf-${f.key}" class="form-control" value="${esc(raw)}" placeholder="${esc(f.ph||'')}"></div>`;
+  }).join('');
+
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+
+  setTimeout(() => {
+    const first = document.getElementById('modal-body').querySelector('input,textarea,select');
+    if (first) first.focus();
+  }, 60);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+  _modalSection = null;
+  _modalId = null;
+}
+
+function onOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function saveModal() {
+  const cfg = MODAL_CONFIGS[_modalSection];
+  const isEdit = !!_modalId;
+  const record = {};
+  let firstError = null;
+
+  for (const f of cfg.fields) {
+    const el = document.getElementById('mf-' + f.key);
+    if (!el) continue;
+    const val = el.value.trim();
+    if (f.req && !val) {
+      el.classList.add('error');
+      el.addEventListener('input', () => el.classList.remove('error'), { once: true });
+      if (!firstError) firstError = el;
+      continue;
+    }
+    record[f.key] = val;
+  }
+
+  if (firstError) { firstError.focus(); return; }
+
+  if (isEdit) {
+    const idx = db[_modalSection].findIndex(r => r.id === _modalId);
+    if (idx >= 0) db[_modalSection][idx] = { ...db[_modalSection][idx], ...record };
+  } else {
+    record.id = genId();
+    db[_modalSection].push(record);
+  }
+
+  saveDB();
+  renderAll();
+  closeModal();
+  toast(isEdit ? 'Запись обновлена' : 'Запись добавлена');
+}
+
+// ── DELETE ────────────────────────────────────────────
+let _pendingDelete = null;
+
+function askDelete(section, id) {
+  _pendingDelete = { section, id };
+  document.getElementById('confirm-overlay').classList.remove('hidden');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.add('hidden');
+  _pendingDelete = null;
+}
+
+function confirmDelete() {
+  if (!_pendingDelete) return;
+  const { section, id } = _pendingDelete;
+  db[section] = db[section].filter(r => r.id !== id);
+  saveDB();
+  renderAll();
+  closeConfirm();
+  toast('Запись удалена');
+}
+
+// ── JSON EXPORT / IMPORT ──────────────────────────────
+function downloadJSON() {
+  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `job-tracker-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('JSON скачан');
+}
+
+function uploadJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      const keys = ['network','resume','linkedin','applications','interviews'];
+      keys.forEach(k => { if (Array.isArray(parsed[k])) db[k] = parsed[k]; });
+      saveDB();
+      renderAll();
+      toast('Данные загружены');
+    } catch { toast('Ошибка: неверный формат файла'); }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ── CSV EXPORT ────────────────────────────────────────
+function exportCSV(section) {
+  let headers, rows;
+  const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+
+  if (section === 'applications') {
+    headers = ['Компания','Позиция','Дата','Канал','Статус','Ссылка','Заметка'];
+    rows = db.applications.map(r => [r.company,r.position,r.date,r.channel,r.status,r.link,r.note]);
+  } else {
+    headers = ['Компания','Роль','Дата','Этап','Итог','Инсайты'];
+    rows = db.interviews.map(r => [r.company,r.role,r.date,r.stage,r.result,r.insights]);
+  }
+
+  const csv = [headers, ...rows].map(row => row.map(q).join(',')).join('\r\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${section}-${today()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV скачан');
+}
+
+// ── TOAST ─────────────────────────────────────────────
+function toast(msg) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+// ── KEYBOARD ──────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!document.getElementById('confirm-overlay').classList.contains('hidden')) { closeConfirm(); return; }
+    if (!document.getElementById('modal-overlay').classList.contains('hidden')) { closeModal(); return; }
+  }
+  if (e.key === 'Enter' && e.ctrlKey) {
+    if (!document.getElementById('modal-overlay').classList.contains('hidden')) saveModal();
+  }
+});
+
+// ── INIT ──────────────────────────────────────────────
+checkStorage();
+loadDB();
+renderAll();
+window.addEventListener('beforeunload', saveDB);
+</script>
+</body>
+</html>

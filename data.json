@@ -1,0 +1,198 @@
+{
+  "network": [],
+  "resume": [],
+  "linkedin": [],
+  "applications": [
+    {
+      "id": "import001",
+      "company": "OCSiAl Group",
+      "position": "Recruiter",
+      "date": "2026-03-30",
+      "channel": "LinkedIn",
+      "status": "отказ",
+      "link": "https://www.linkedin.com/jobs/view/4378906706/",
+      "note": "filled, but they saved my CV"
+    },
+    {
+      "id": "import002",
+      "company": "Паулина",
+      "position": "Legalisation manager",
+      "date": "2026-03-31",
+      "channel": "Telegram / Direct",
+      "status": "переговоры",
+      "link": "",
+      "note": "negotiation | контакт: @pollyna_33"
+    },
+    {
+      "id": "import003",
+      "company": "ennovationHUB",
+      "position": "Talent Partner / In-house Recruiter",
+      "date": "2026-04-01",
+      "channel": "LinkedIn",
+      "status": "отказ",
+      "link": "https://www.linkedin.com/jobs/view/4366213532/",
+      "note": "rejection (13.04)"
+    },
+    {
+      "id": "import004",
+      "company": "MIRA LLC",
+      "position": "Senior Recruiter",
+      "date": "2026-04-03",
+      "channel": "LinkedIn",
+      "status": "отправлен",
+      "link": "https://www.linkedin.com/jobs/view/4384311086/",
+      "note": ""
+    },
+    {
+      "id": "import005",
+      "company": "Citrus Systems",
+      "position": "Recruiter (Russian-speaking)",
+      "date": "2026-04-06",
+      "channel": "LinkedIn",
+      "status": "отказ",
+      "link": "https://www.linkedin.com/jobs/view/4387720824/",
+      "note": "applied + reach out — rejection (16.04)"
+    },
+    {
+      "id": "import006",
+      "company": "ACM Limited",
+      "position": "Recruiter (Remote)",
+      "date": "2026-04-06",
+      "channel": "LinkedIn",
+      "status": "отправлен",
+      "link": "https://www.linkedin.com/jobs/view/4390341518/",
+      "note": ""
+    },
+    {
+      "id": "import007",
+      "company": "Srma Consulting",
+      "position": "HR for Happiness",
+      "date": "2026-04-06",
+      "channel": "LinkedIn",
+      "status": "отправлен",
+      "link": "https://www.linkedin.com/jobs/view/4344380788/",
+      "note": ""
+    },
+    {
+      "id": "import008",
+      "company": "Databricks",
+      "position": "Candidate Experience Coordinator (Fixed-Term Contract)",
+      "date": "2026-04-06",
+      "channel": "LinkedIn",
+      "status": "отправлен",
+      "link": "https://www.linkedin.com/jobs/view/4373400137/",
+      "note": ""
+    },
+    {
+      "id": "import009",
+      "company": "ASEE",
+      "position": "Talent Acquisition Specialist",
+      "date": "2026-04-08",
+      "channel": "LinkedIn",
+      "status": "отправлен",
+      "link": "https://www.linkedin.com/jobs/view/4398352863/",
+      "note": ""
+    },
+    {
+      "id": "import010",
+      "company": "JetBrains",
+      "position": "Talent Sourcer",
+      "date": "2026-04-13",
+      "channel": "LinkedIn",
+      "status": "отказ",
+      "link": "https://www.linkedin.com/jobs/view/4376207575/",
+      "note": "applied — rejection (16.04)"
+    },
+    {
+      "id": "import011",
+      "company": "Mr. Bit",
+      "position": "Recruiter",
+      "date": "2026-04-15",
+      "channel": "Прямой отклик",
+      "status": "интервью",
+      "link": "https://mrbit.career/vacancies/Recruiter",
+      "note": "incoming — interview (22.04)"
+    },
+    {
+      "id": "import012",
+      "company": "FinDev",
+      "position": "TalentOps",
+      "date": "2026-04-20",
+      "channel": "Telegram",
+      "status": "отправлен",
+      "link": "https://t.me/c/1863082923/4333/7821",
+      "note": ""
+    },
+    {
+      "id": "import013",
+      "company": "EVOTYM",
+      "position": "Recruiter / Talent Acquisition",
+      "date": "2026-04-23",
+      "channel": "LinkedIn",
+      "status": "отправлен",
+      "link": "https://www.linkedin.com/posts/dari-loiko_recruitertalent-acquisition-evotym-share-7452723818160345088-O4f0/",
+      "note": ""
+    },
+    {
+      "id": "import014",
+      "company": "Web Design Sun",
+      "position": "Recruiter",
+      "date": "2026-04-27",
+      "channel": "Прямой отклик",
+      "status": "отправлен",
+      "link": "https://webdesignsun.com/",
+      "note": "applied + reach out TG | бриф: https://docs.google.com/document/d/1bd2ez6eUUlFUXtxbaIBuXvDvuOyJvh60kyg9NoeaZXc/edit"
+    },
+    {
+      "id": "import015",
+      "company": "MEDvidi",
+      "position": "Talent Acquisition Specialist",
+      "date": "2026-04-27",
+      "channel": "Прямой отклик",
+      "status": "отправлен",
+      "link": "https://medvidi.com/careers/co/remote/2F.F5F-15.60A/talent-acquisition-specialist/all",
+      "note": ""
+    },
+    {
+      "id": "import016",
+      "company": "Scalable",
+      "position": "IT Recruiter",
+      "date": "2026-04-27",
+      "channel": "Прямой отклик",
+      "status": "отправлен",
+      "link": "https://scalablesolutions.io/careers/vacancy/it-recruiter",
+      "note": ""
+    },
+    {
+      "id": "import017",
+      "company": "Infomediji",
+      "position": "Talent Acquisition Partner",
+      "date": "2026-04-27",
+      "channel": "Прямой отклик",
+      "status": "отправлен",
+      "link": "https://infomediji.com/careers/open-position?id=2573908",
+      "note": "applied + reach out TG"
+    },
+    {
+      "id": "import018",
+      "company": "ROLEVIA",
+      "position": "Карьерный менеджер",
+      "date": "2026-04-27",
+      "channel": "Прямой отклик",
+      "status": "отправлен",
+      "link": "https://pear-sneezeweed-d89.notion.site/ROLEVIA-83949b924ed2835ebd0501407966244b",
+      "note": "applied + reach out TG"
+    },
+    {
+      "id": "import019",
+      "company": "Keepgo",
+      "position": "Junior/Middle HR",
+      "date": "2026-04-27",
+      "channel": "GeekJob",
+      "status": "отправлен",
+      "link": "https://geekjob.ru/vacancy/69e8c139b748c620100036f2",
+      "note": "applied + reach out LI"
+    }
+  ],
+  "interviews": []
+}
